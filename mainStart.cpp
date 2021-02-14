@@ -32,7 +32,7 @@ void setTokenTypes(){
 // parse till next typespace
 string getNextLex(string line, int &ind){
 	string temp="";
-	
+
 	while(line[ind]!=' ' && line[ind]!='\n'){
 		temp += line[ind++];
 	}
@@ -53,7 +53,7 @@ void lexerLine(string line, int &n){
 		if(keys.find(lexeme)!=keys.end()){ // handling keywords and special characters
 			int toknum = keys[lexeme];
 			string type_tok = toktyp[lexeme];
-			fout << "Token type : " << type_tok << ", Lexeme : " << lexeme << " on line number " << n << "\n";
+			fout << "Token type : " << type_tok << ", Token Number : " << toknum << ", Lexeme : " << lexeme << " on line number " << n << "\n";
 			// for(int i=0; i<lexeme.length(); i++) 
 			// 	putc(lexeme[i],fout);
 		}
