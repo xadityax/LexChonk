@@ -92,7 +92,7 @@ void lexerLine(string line, int &n){
 		else{
 			// handle identifiers and stuff that cannot be mapped
 			bool check_identifier = is_identifier(lexeme);
-			fout<<"Token: Identifier, Lexeme: "<<lexeme<<" on line number "<< "\n";
+			fout<<"Token: Identifier, Lexeme: "<<lexeme<<" on line number "<< n<< "\n";
 			fout << lexeme << " : error on line number : " << n << "\n";
 		}
 	}

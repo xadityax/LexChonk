@@ -1,0 +1,4 @@
+Token type : Integer type declarator, Token Number : 100, Lexeme : $ on line number 1
+Token type : loop construct, Token Number : 103, Lexeme : for on line number 2
+Token: Identifier, Lexeme: check on line number 3
+check : error on line number : 3
