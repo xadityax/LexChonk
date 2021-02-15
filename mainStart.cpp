@@ -23,7 +23,27 @@ void mapKeywords(){
 void setTokenTypes(){
 	// TO-DO, map lexeme to particular token type
 	toktyp["$"] = "Integer type declarator";
+	toktyp["@"] = "string type declarator";
+	toktyp["for"] = "loop construct";
+	toktyp["if"] = "conditional construct";
+	toktyp["else"] = "conditional construct";
+	toktyp["("] = "parentheses begin";
+	toktyp[")"] = "parentheses end";
+	toktyp["{"] = "braces begin";
+	toktyp["}"] = "braces end";
+	toktyp["+"] = "arithmetic operator - addition";
+	toktyp["-"] = "arithmetic operator - subtraction";
+	toktyp["/"] = "arithmetic operator - division";
+	toktyp["*"] = "arithmetic operator - multiplication";
+	toktyp["%"] = "arithmetic operator - modulo";
+	toktyp[">"] = "relational operator - greater than";
+	toktyp["<"] = "relational operator - less than";
+	toktyp["=="] = "relational operator - equality";
+	toktyp["="] = "assignment operator";
+	toktyp["++"] = "increment operator";
+	toktyp["--"] = "decrement operator";
 	toktyp["main"] = "Main function declarator";
+	toktyp["return"] = "function return statement";
 	toktyp["void"] = "void function declarator";
 	toktyp[";"] = "end_of_line representor";
 	toktyp["#"] = "character type declarator";
