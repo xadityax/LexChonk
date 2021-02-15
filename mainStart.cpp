@@ -73,6 +73,23 @@ bool is_identifier(string lexeme){
 	return true;
 }
 
+bool is_intLiteral(string lexeme){
+	int len=lexeme.length();
+	int c_ind=0;
+	if(lexeme[0]=='0'){
+		return false;
+	}
+	else{
+		while(c_ind<len){
+			if(!(isdigit(lexeme[c_ind]))){
+				return false;
+			}
+			c_ind++;
+		}
+	}
+	return true;
+}
+
 // lex line by line
 void lexerLine(string line, int &n){
 	for(int ind=0;ind<line.length();ind++){
@@ -85,14 +102,20 @@ void lexerLine(string line, int &n){
 		if(keys.find(lexeme)!=keys.end()){ // handling keywords and special characters
 			int toknum = keys[lexeme];
 			string type_tok = toktyp[lexeme];
-			fout << "Token type : " << type_tok << ", Token Number : " << toknum << ", Lexeme : " << lexeme << " on line number " << n << "\n";
+			// fout << "Token type : " << type_tok << ", Token Number : " << toknum << ", Lexeme : " << lexeme << " on line number " << n << "\n";
+			fout<<"<"<<type_tok<<", "<<lexeme<<">\n";
 			// for(int i=0; i<lexeme.length(); i++) 
 			// 	putc(lexeme[i],fout);
 		}
-		else{
+		else if(is_identifier(lexeme)){
 			// handle identifiers and stuff that cannot be mapped
-			bool check_identifier = is_identifier(lexeme);
-			fout<<"Token: Identifier, Lexeme: "<<lexeme<<" on line number "<< n<< "\n";
+			// fout<<"Token: Identifier, Lexeme: "<<lexeme<<" on line number "<< n<< "\n";
+			fout<<"<Identifier"<<", "<<lexeme<<">\n";
+		}
+		else if(is_intLiteral(lexeme)){
+			fout<<"<int_literal"<<", "<<lexeme<<">\n";
+		}
+		else{
 			fout << lexeme << " : error on line number : " << n << "\n";
 		}
 	}
