@@ -52,7 +52,8 @@ void setTokenTypes(){
 // parse till next typespace
 string getNextLex(string line, int &ind){
 	string temp="";
-
+	//account for semi-colons too? @xadityax
+	//Also what if their is no space between lexemes? e.g. some_literal=5 @xadityax
 	while(line[ind]!=' ' && line[ind]!='\n'){
 		temp += line[ind++];
 	}
@@ -60,6 +61,17 @@ string getNextLex(string line, int &ind){
 	return temp;
 }
 
+bool is_identifier(string lexeme){
+	int len=lexeme.length();
+	int c_ind=0;
+	while(c_ind<len){
+		if(!isalpha(lexeme[c_ind])){
+			return false;
+		}
+		c_ind++;
+	}
+	return true;
+}
 
 // lex line by line
 void lexerLine(string line, int &n){
@@ -79,6 +91,8 @@ void lexerLine(string line, int &n){
 		}
 		else{
 			// handle identifiers and stuff that cannot be mapped
+			bool check_identifier = is_identifier(lexeme);
+			fout<<"Token: Identifier, Lexeme: "<<lexeme<<" on line number "<< "\n";
 			fout << lexeme << " : error on line number : " << n << "\n";
 		}
 	}
