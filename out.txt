@@ -7,3 +7,19 @@ che2476th : error on line number : 4
 <int_literal, 120>
 212uysdgc : error on line number : 8
 002135 : error on line number : 9
+<Integer type declarator, $>
+<Identifier, a>
+<assignment operator, =>
+<int_literal, 5>
+<Integer type declarator, $>
+<Identifier, c>
+<assignment operator, =>
+<Identifier, b>
+<arithmetic operator - addition, +>
+<int_literal, 5>
+<function return statement, return>
+<Identifier, d>
+<end_of_line representor, ;>
+<Identifier, e>
+<increment operator, ++>
+<end_of_line representor, ;>

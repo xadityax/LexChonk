@@ -49,19 +49,42 @@ void setTokenTypes(){
 	toktyp["#"] = "character type declarator";
 }
 
-// parse till next typespace
-string getNextLex(string line, int &ind){
-	string temp="";
-	//account for semi-colons too? @xadityax
-	//Also what if their is no space between lexemes? e.g. some_literal=5 @xadityax
-	while(line[ind]!=' ' && line[ind]!='\n'){
-		temp += line[ind++];
+bool isSpecialSymbol(string str){
+	if(str=="$" || str=="@" || str=="#"){
+		return true;
 	}
-	// cout << " the char is : " << line[ind] << "\n";
-	return temp;
+	return false;
 }
 
-bool is_identifier(string lexeme){
+bool isBinaryOperator(string str){
+	if(str=="+" || str=="-" || str=="*" || str=="/" || str=="%"){
+		return true;
+	}
+	return false;
+}
+
+bool isUnaryOperator(string str){
+	if(str=="++" || str=="--"){
+		return true;
+	}	
+	return false;
+}
+
+bool isAssignmentOperator(string str){
+	if(str=="="){
+		return true;
+	}
+	return false;
+}
+
+bool isRelationalOperator(string str){
+	if(str==">" || str == "<" || str == "=="){
+		return true;
+	}
+	return false;
+}
+
+bool is_string(string lexeme){
 	int len=lexeme.length();
 	int c_ind=0;
 	while(c_ind<len){
@@ -70,6 +93,18 @@ bool is_identifier(string lexeme){
 		}
 		c_ind++;
 	}
+	return true;
+}
+
+bool is_stringOfDigits(string lexeme){
+	int len=lexeme.length();
+	int c_ind=0;
+	while(c_ind<len){
+			if(!(isdigit(lexeme[c_ind]))){
+				return false;
+			}
+			c_ind++;
+		}
 	return true;
 }
 
@@ -90,6 +125,79 @@ bool is_intLiteral(string lexeme){
 	return true;
 }
 
+bool is_alphanumericString(string str){
+	int len=str.length();
+	int c_ind=0;
+	while(c_ind<len){
+		if(!isalnum(str[c_ind])){
+			return false;
+		}
+		c_ind++;
+	}
+	return true;
+}
+
+//checks if the next character can be combined with the current string or not
+bool stringPossible(string temp, char c){
+	if(temp.length()==0){
+		return true;
+	}
+	// else if(is_string(temp) && isalpha(c)){
+	// 	return true;
+	// }
+	else if(is_alphanumericString(temp) && isalnum(c)){
+		return true;
+	}
+	else if(temp=="+" && c=='+'){
+		return true;
+	}
+	else if(temp=="-" && c=='-'){
+		return true;
+	}
+	else if(temp=="=" && c=='='){
+		return true;
+	}
+	// else if(is_stringOfDigits(temp) && isdigit(c)){
+	// 	return true;
+	// }
+	else{
+		return false;
+	}
+}
+
+// parse till next typespace
+string getNextLex(string line, int &ind){
+	string temp="";
+	// cout<<"Line recvd:"<<line<<endl;
+	//account for semi-colons too? @xadityax
+	//Also what if their is no space between lexemes? e.g. some_literal=5 @xadityax
+	// cout<<"Ind: "<<ind<<", value: "<<line[ind]<<endl;
+	while(line[ind]!='\n'){
+		// cout<<"Examining: "<<line[ind]<<endl;
+		if(line[ind]==' '){
+			if(temp.length()>0){
+				return temp;
+			}
+			else{
+				continue;
+			}
+		}
+		else if(stringPossible(temp, line[ind])){
+			temp+= line[ind++];
+		}
+		else{
+			ind--;
+			return temp;
+		}
+	}
+	while(line[ind]!=' ' && line[ind]!='\n'){
+		temp += line[ind++];
+	}
+	// cout << " the char is : " << line[ind] << "\n";
+	// cout<<"Returning: "<<temp<<endl;
+	// return temp;
+}
+
 // lex line by line
 void lexerLine(string line, int &n){
 	for(int ind=0;ind<line.length();ind++){
@@ -107,7 +215,7 @@ void lexerLine(string line, int &n){
 			// for(int i=0; i<lexeme.length(); i++) 
 			// 	putc(lexeme[i],fout);
 		}
-		else if(is_identifier(lexeme)){
+		else if(is_string(lexeme)){
 			// handle identifiers and stuff that cannot be mapped
 			// fout<<"Token: Identifier, Lexeme: "<<lexeme<<" on line number "<< n<< "\n";
 			fout<<"<Identifier"<<", "<<lexeme<<">\n";

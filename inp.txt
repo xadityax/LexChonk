@@ -7,3 +7,7 @@ che2476th
 120
 212uysdgc
 002135
+$ a=5
+$ c = b+5
+return d;
+e++;
