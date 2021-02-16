@@ -1,0 +1,34 @@
+<Integer type declarator, $>  on line number 1
+<Main function declarator, main>  on line number 1
+<parentheses begin, (>  on line number 1
+<parentheses end, )>  on line number 1
+<braces begin, {>  on line number 1
+<Integer type declarator, $>  on line number 2
+< Identifier, a> on line number 2
+<assignment operator, =>  on line number 2
+< int_literal, 52323> on line number 2
+<end_of_line representor, ;>  on line number 2
+<Integer type declarator, $>  on line number 3
+< Identifier, a> on line number 3
+<assignment operator, =>  on line number 3
+< int_literal, 523> on line number 3
+<end_of_line representor, ;>  on line number 3
+<string type declarator, @>  on line number 4
+< Identifier, c> on line number 4
+<assignment operator, =>  on line number 4
+<String Literal, "skdskdksd">  on line number 4
+"skdskdksd" : error on line number : 4
+< Identifier, a> on line number 5
+<increment operator, ++>  on line number 5
+<end_of_line representor, ;>  on line number 5
+<Integer type declarator, $>  on line number 6
+< Identifier, a> on line number 6
+<assignment operator, =>  on line number 6
+< Identifier, c> on line number 6
+<arithmetic operator - addition, +>  on line number 6
+< int_literal, 5> on line number 6
+<end_of_line representor, ;>  on line number 6
+<function return statement, return>  on line number 7
+< int_literal, 0> on line number 7
+<end_of_line representor, ;>  on line number 7
+<braces end, }>  on line number 8

@@ -1,0 +1,8 @@
+$ main(){
+$ a = 52323;
+$ a=523;
+@ c = "skdskdksd";
+a++;
+$ a = c+5;
+return 0;
+} 
