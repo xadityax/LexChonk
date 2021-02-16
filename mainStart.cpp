@@ -11,44 +11,43 @@ map<string,int> keys;
 vector<string> arr = {"$","@","#","for","main","if","else","return","(",")","{","}",";","+","-","*","/","%","<",">","==","=","++","--","void"};
 map<string,string> toktyp;
 
-// map for keywords
+// map token number for keywords
 void mapKeywords(){
 	for(int i=0;i<arr.size();i++){
 		keys[arr[i]] = i+100;
 	}
 }
 
-
-// token type for keywords eg. while is while, 42 is int_literal, "hello" is string literal, < is relational_operator
+// token type for keywords eg. while is while loop construct, 42 is int_literal, "hello" is string literal, < is relational_operator
 void setTokenTypes(){
-	// TO-DO, map lexeme to particular token type
 	toktyp["$"] = "Integer type declarator";
-	toktyp["@"] = "string type declarator";
-	toktyp["for"] = "loop construct";
-	toktyp["if"] = "conditional construct";
-	toktyp["else"] = "conditional construct";
-	toktyp["("] = "parentheses begin";
-	toktyp[")"] = "parentheses end";
-	toktyp["{"] = "braces begin";
-	toktyp["}"] = "braces end";
-	toktyp["+"] = "arithmetic operator - addition";
-	toktyp["-"] = "arithmetic operator - subtraction";
-	toktyp["/"] = "arithmetic operator - division";
-	toktyp["*"] = "arithmetic operator - multiplication";
-	toktyp["%"] = "arithmetic operator - modulo";
-	toktyp[">"] = "relational operator - greater than";
-	toktyp["<"] = "relational operator - less than";
-	toktyp["=="] = "relational operator - equality";
-	toktyp["="] = "assignment operator";
-	toktyp["++"] = "increment operator";
-	toktyp["--"] = "decrement operator";
+	toktyp["@"] = "String type declarator";
+	toktyp["for"] = "For Loop construct";
+	toktyp["if"] = "If - Conditional construct";
+	toktyp["else"] = "Else Conditional construct";
+	toktyp["("] = "Parentheses begin";
+	toktyp[")"] = "Parentheses end";
+	toktyp["{"] = "Braces begin";
+	toktyp["}"] = "Braces end";
+	toktyp["+"] = "Arithmetic operator - addition";
+	toktyp["-"] = "Arithmetic operator - subtraction";
+	toktyp["/"] = "Arithmetic operator - division";
+	toktyp["*"] = "Arithmetic operator - multiplication";
+	toktyp["%"] = "Arithmetic operator - modulo";
+	toktyp[">"] = "Relational operator - greater than";
+	toktyp["<"] = "Relational operator - less than";
+	toktyp["=="] = "Relational operator - equality";
+	toktyp["="] = "Assignment operator";
+	toktyp["++"] = "Increment operator";
+	toktyp["--"] = "Decrement operator";
 	toktyp["main"] = "Main function declarator";
-	toktyp["return"] = "function return statement";
-	toktyp["void"] = "void function declarator";
-	toktyp[";"] = "end_of_line representor";
-	toktyp["#"] = "character type declarator";
+	toktyp["return"] = "Function return statement";
+	toktyp["void"] = "Void function declarator";
+	toktyp[";"] = "End_of_line representor";
+	toktyp["#"] = "Character type declarator";
 }
 
+// # or $ or @
 bool isSpecialSymbol(string str){
 	if(str=="$" || str=="@" || str=="#"){
 		return true;
@@ -139,36 +138,7 @@ bool is_alphanumericString(string str){
 	return true;
 }
 
-//checks if the next character can be combined with the current string or not
-bool stringPossible(string temp, char c){
-	if(temp.length()==0){
-		return true;
-	}
-	// else if(is_string(temp) && isalpha(c)){
-	// 	return true;
-	// }
-	else if(is_alphanumericString(temp) && isalnum(c)){
-		return true;
-	}
-	else if(temp=="+" && c=='+'){
-		return true;
-	}
-	else if(temp=="-" && c=='-'){
-		return true;
-	}
-	else if(temp=="=" && c=='='){
-		return true;
-	}
-	// else if(is_stringOfDigits(temp) && isdigit(c)){
-	// 	return true;
-	// }
-	else{
-		return false;
-	}
-}
-
-// parse till next lexeme on current line
-
+// mostly identifiers are matched here
 string get_name(string line, int len, int &ind){
 	string buf;
 	buf.push_back(line[ind++]);
@@ -182,6 +152,7 @@ string get_name(string line, int len, int &ind){
 	return buf;
 }
 
+// integer literals parsing
 string get_num(string line, int len, int &ind){
 	string buf;
 	int first_digit_at = ind;
@@ -213,6 +184,7 @@ string get_num(string line, int len, int &ind){
 	return "";
 }
 
+// as name suggests
 void remove_back_slash(string &s){
 	for( auto it = s.begin(); it != s.end(); ++it ) {
 		if(* it == '\\'){
@@ -230,6 +202,7 @@ void remove_back_slash(string &s){
 	}
 }
 
+// string literals enclosed with " "
 string get_const_str(string line, int len, int &ind){
 	string buf = "\"";
 	const char quote_type = line[ind];
@@ -344,14 +317,10 @@ string get_operator(string line,int line_len,int &i){
 
 
 
-string getNextLexOP(string line, int &ind){
+string getNextLex(string line, int &ind){
 	string temp="";
-	cout << "Line recvd:" << line << endl;
-	// cout<<"Ind: "<<ind<<", value: "<<line[ind]<<endl;
 
 	while(line[ind]!='\n'){
-		// cout<<"Examining: "<<line[ind]<<endl;
-
 		// whitespace
 		if(line[ind]==' ' || line[ind]=='\t'){
 				ind++;
@@ -359,7 +328,6 @@ string getNextLexOP(string line, int &ind){
 		}
 		
 		// special symbol (int char string)
-
 		if( (line[ind]=='$' || line[ind]=='#' || line[ind]=='@') && (line[ind+1]==' ' || line[ind+1]=='\n')){
 			if(line[ind]=='$'){
 				return "$";
@@ -371,14 +339,6 @@ string getNextLexOP(string line, int &ind){
 		// strings
 		if(isalpha(line[ind])){
 			string str = get_name(line, line.length(), ind);
-			// if( str == TokStrs[ TOK_MAIN_SRC_BEG ] ) {
-			// 	if( !is_main_src ) main_src_block = true;
-			// 	continue;
-			// } else if( str == TokStrs[ TOK_MAIN_SRC_END ] ) {
-			// 	if( !is_main_src ) main_src_block = false;
-			// 	continue;
-			// }
-			// if( main_src_block ) continue;
 			return str;
 		}
 
@@ -407,8 +367,6 @@ string getNextLexOP(string line, int &ind){
 		}
 		else return op;
 	}
-	// cout << " the char is : " << line[ind] << "\n";
-	// cout<<"Returning: "<<temp<<endl;
 	return temp;
 }
 
@@ -416,12 +374,10 @@ string getNextLexOP(string line, int &ind){
 // lex line by line
 void lexerLine(string line, int &n){
 	for(int ind=0;ind<line.length();ind++){
-		string lexeme = getNextLexOP(line,ind);
-		cout << "From lexer line :::: " << lexeme << "\n";
-		// end
+		string lexeme = getNextLex(line,ind);
+
 		if(lexeme.length()==0) 
 			break;
-		//cout << lexeme << "\n";
 		if(lexeme[0]=='\"'){
 			cout << "<" << "String Literal" << ", " << lexeme << "> " << " on line number " << n << "\n";
 			fout << "<" << "String Literal" << ", " << lexeme << "> " << " on line number " << n << "\n";
@@ -429,37 +385,40 @@ void lexerLine(string line, int &n){
 		if(keys.find(lexeme)!=keys.end()){ // handling keywords and special characters
 			int toknum = keys[lexeme];
 			string type_tok = toktyp[lexeme];
-			// fout << "Token type : " << type_tok << ", Token Number : " << toknum << ", Lexeme : " << lexeme << " on line number " << n << "\n";
 			cout << "<" << type_tok << ", " << lexeme << "> " << " on line number " << n << "\n";
 			fout << "<" << type_tok << ", " << lexeme << "> " << " on line number " << n << "\n";
+			if(toknum == 103){
+				
+			}
 		}
 		else if(lexeme.compare("error_Digit")==0){
-			cout << lexeme << " : error on line number : " << n << "\n";
-			fout << lexeme << " : error on line number : " << n << "\n";
+			cout << lexeme << " : Error on line number : " << n << "Illegal Digit Sequence encountered\n";
+			fout << lexeme << " : Error on line number : " << n << "Illegal Digit Sequence encountered\n";
 			break;
 		}
 		else if(lexeme == "error_Const_String"){
-			cout << lexeme << " : error on line number : " << n << "\n";
-			fout << lexeme << " : error on line number : " << n << "\n";
+			cout << lexeme << " : Error on line number : " << n << "Illegal String Literal construct\n";
+			fout << lexeme << " : Error on line number : " << n << "Illegal String Literal construct\n";
 			break;
 		}
 		else if(lexeme == "error_Operator_OR_Brackets"){
-			cout << lexeme << " : error on line number : " << n << "\n";
-			fout << lexeme << " : error on line number : " << n << "\n";
+			cout << lexeme << " : Error on line number : " << n << "Illegal Operator/Bracket construct\n";
+			fout << lexeme << " : Error on line number : " << n << "Illegal Operator/Bracket construct\n";
 			break;
 		}
 		else if(is_string(lexeme)){
-			// handle identifiers and stuff that cannot be mapped
+			// Handle Identifiers and stuff that cannot be mapped
 			cout << "< Identifier" << ", " << lexeme << ">" << " on line number " << n << "\n";
 			fout << "< Identifier" << ", " << lexeme << ">" << " on line number " << n << "\n";
 		}
 		else if(is_intLiteral(lexeme)){
+			// Integer literals
 			cout << "< int_literal" << ", " << lexeme <<">" << " on line number " << n << "\n";
 			fout << "< int_literal" << ", " << lexeme <<">" << " on line number " << n << "\n";
 		}
 		else{
-			cout << lexeme << " : error on line number : " << n << "\n";
-			fout << lexeme << " : error on line number : " << n << "\n";
+			cout << lexeme << " : Error on line number : " << n << "Illegal Symbol\n";
+			fout << lexeme << " : Error on line number : " << n << "Illegal Symbol\n";
 			break;
 		}
 	}
@@ -472,12 +431,12 @@ int main(){
     mapKeywords();
     setTokenTypes();
     string linbuff = "";
-	ifstream fin ("inp.txt");
-	ofstream fout ("out.txt");
+	ifstream fin("inp.txt");
+	ofstream fout("out.txt");
 	int c,n=0;
 	if (fin.is_open()){
 		if(fout.is_open()){
-		    while (getline (fin,linbuff)){
+		    while (getline(fin,linbuff)){
 		    	cout << linbuff << '\n';
 		    	linbuff+="\n";
 		    	n++;
