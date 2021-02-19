@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <bits/stdc++.h>
+//#include <bits/stdc++.h>
+#include <vector>
+#include <map>
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -110,11 +112,13 @@ bool is_stringOfDigits(string lexeme){
 bool is_intLiteral(string lexeme){
 	int len=lexeme.length();
 	int c_ind=0;
+
 	if(lexeme[0]=='0' && len==1)
 		return true;
 	if(lexeme[0]=='0'){
 		return false;
 	}
+	if(lexeme[0] == '~') c_ind++;
 	else{
 		while(c_ind<len){
 			if(!(isdigit(lexeme[c_ind]))){
@@ -155,6 +159,11 @@ string get_name(string line, int len, int &ind){
 // integer literals parsing
 string get_num(string line, int len, int &ind){
 	string buf;
+	//negative numbers
+	if(line[ind] == '~'){
+		ind++;
+		buf.push_back('~');	
+	} 
 	int first_digit_at = ind;
 	bool success = true;
 	while( ind < len && isdigit(line[ind])) {
@@ -222,6 +231,7 @@ string get_const_str(string line, int len, int &ind){
 	// check if required
 	remove_back_slash(buf);
 	buf+="\"";
+	--ind;
 	return buf;
 }
 
@@ -316,10 +326,13 @@ string get_operator(string line,int line_len,int &i){
 }
 
 
-
 string getNextLex(string line, int &ind){
 	string temp="";
 
+	// Similar to a DFA based implementation
+	// Case 0 : Whitespace - > Skip
+	// Case 1 : $/#/@ - > Move to state zero since we need space
+	// Case 2 : Alphabet -> keep scanning alphabets i.e. remain in case 2
 	while(line[ind]!='\n'){
 		// whitespace
 		if(line[ind]==' ' || line[ind]=='\t'){
@@ -332,7 +345,8 @@ string getNextLex(string line, int &ind){
 			if(line[ind]=='$'){
 				return "$";
 			}
-			else if(line[ind]=='#') return "#";
+			else if(line[ind]=='#') 
+				return "#";
 			return "@";
 		}
 
@@ -343,7 +357,7 @@ string getNextLex(string line, int &ind){
 		}
 
 		// numbers
-		if(isdigit(line[ind])){
+		if(isdigit(line[ind]) || line[ind]== '~'){
 			string num = get_num(line,line.length(),ind);
 			if(num.empty()){
 				return "error_Digit";
@@ -378,32 +392,33 @@ void lexerLine(string line, int &n){
 
 		if(lexeme.length()==0) 
 			break;
-		if(lexeme[0]=='\"'){
+		//skip parsing if comment
+		if(lexeme[0] == '^')
+			return;
+		else if(lexeme[0]=='\"'){
 			cout << "<" << "String Literal" << ", " << lexeme << "> " << " on line number " << n << "\n";
 			fout << "<" << "String Literal" << ", " << lexeme << "> " << " on line number " << n << "\n";
+			continue;
 		}
-		if(keys.find(lexeme)!=keys.end()){ // handling keywords and special characters
+		else if(keys.find(lexeme)!=keys.end()){ // handling keywords and special characters
 			int toknum = keys[lexeme];
 			string type_tok = toktyp[lexeme];
 			cout << "<" << type_tok << ", " << lexeme << "> " << " on line number " << n << "\n";
 			fout << "<" << type_tok << ", " << lexeme << "> " << " on line number " << n << "\n";
-			if(toknum == 103){
-				
-			}
 		}
 		else if(lexeme.compare("error_Digit")==0){
-			cout << lexeme << " : Error on line number : " << n << "Illegal Digit Sequence encountered\n";
-			fout << lexeme << " : Error on line number : " << n << "Illegal Digit Sequence encountered\n";
+			cout << lexeme << " : Error on line number : " << n << "  Illegal Digit Sequence encountered\n";
+			fout << lexeme << " : Error on line number : " << n << "  Illegal Digit Sequence encountered\n";
 			break;
 		}
 		else if(lexeme == "error_Const_String"){
-			cout << lexeme << " : Error on line number : " << n << "Illegal String Literal construct\n";
-			fout << lexeme << " : Error on line number : " << n << "Illegal String Literal construct\n";
+			cout << lexeme << " : Error on line number : " << n << "  Illegal String Literal construct\n";
+			fout << lexeme << " : Error on line number : " << n << "  Illegal String Literal construct\n";
 			break;
 		}
 		else if(lexeme == "error_Operator_OR_Brackets"){
-			cout << lexeme << " : Error on line number : " << n << "Illegal Operator/Bracket construct\n";
-			fout << lexeme << " : Error on line number : " << n << "Illegal Operator/Bracket construct\n";
+			cout << lexeme << " : Error on line number : " << n << "  Illegal Operator/Bracket construct\n";
+			fout << lexeme << " : Error on line number : " << n << "  Illegal Operator/Bracket construct\n";
 			break;
 		}
 		else if(is_string(lexeme)){
@@ -417,8 +432,8 @@ void lexerLine(string line, int &n){
 			fout << "< int_literal" << ", " << lexeme <<">" << " on line number " << n << "\n";
 		}
 		else{
-			cout << lexeme << " : Error on line number : " << n << "Illegal Symbol\n";
-			fout << lexeme << " : Error on line number : " << n << "Illegal Symbol\n";
+			cout << lexeme << " : Error on line number : " << n << "  Illegal Symbol\n";
+			fout << lexeme << " : Error on line number : " << n << "  Illegal Symbol\n";
 			break;
 		}
 	}
@@ -437,9 +452,10 @@ int main(){
 	if (fin.is_open()){
 		if(fout.is_open()){
 		    while (getline(fin,linbuff)){
-		    	cout << linbuff << '\n';
+		    	cout << '\n';
 		    	linbuff+="\n";
 		    	n++;
+		    	//parse line by line
 		    	lexerLine(linbuff,n);
 	       		linbuff = "";
 		    }
@@ -455,4 +471,3 @@ int main(){
 	}
 	return 0;
 }
-
