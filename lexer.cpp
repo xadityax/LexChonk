@@ -439,13 +439,16 @@ void lexerLine(string line, int &n){
 }
 
 int main(){
+	string testfile_name;
+	cout<<"Enter the name of the testfile (e.g. inp.txt): \n";
+	cin>>testfile_name;
 	ios::sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
     mapKeywords();
     setTokenTypes();
     string linbuff = "";
-	ifstream fin("inp.txt");
+	ifstream fin(testfile_name);
 	ofstream fout("out.txt");
 	int c,n=0;
 	if (fin.is_open()){
