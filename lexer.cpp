@@ -10,7 +10,7 @@ using namespace std;
 
 ofstream fout ("out.txt");
 map<string,int> keys;
-vector<string> arr = {"$","@","#","for","main","if","else","return","(",")","{","}",";","+","-","*","/","%","<",">","==","=","++","--","void"};
+vector<string> arr = {"$","@","#","while","main","if","else","return","(",")","{","}",";","+","-","*","/","%","<",">","==","=","++","--","void"};
 map<string,string> toktyp;
 
 // map token number for keywords
@@ -24,7 +24,7 @@ void mapKeywords(){
 void setTokenTypes(){
 	toktyp["$"] = "Integer type declarator";
 	toktyp["@"] = "String type declarator";
-	toktyp["for"] = "For Loop construct";
+	toktyp["while"] = "Loop construct - while";
 	toktyp["if"] = "If - Conditional construct";
 	toktyp["else"] = "Else Conditional construct";
 	toktyp["("] = "Parentheses begin";
@@ -445,7 +445,7 @@ int main(){
     mapKeywords();
     setTokenTypes();
     string linbuff = "";
-	ifstream fin("inp1.txt");
+	ifstream fin("inp.txt");
 	ofstream fout("out.txt");
 	int c,n=0;
 	if (fin.is_open()){
