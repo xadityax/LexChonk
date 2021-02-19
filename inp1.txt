@@ -1,0 +1,12 @@
+$ main(){
+	^Code to check if user specufied number is odd or even
+	@ result = "odd";
+	$ num = 0; ^User needs to enter the number here 
+	$ modval= num%2;
+	if(modval==0){
+		result="even_number here";
+	}else{
+		result="odd_number here";
+	}
+	return 0;
+}

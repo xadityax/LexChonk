@@ -45,7 +45,7 @@ void setTokenTypes(){
 	toktyp["main"] = "Main function declarator";
 	toktyp["return"] = "Function return statement";
 	toktyp["void"] = "Void function declarator";
-	toktyp[";"] = "End_of_line representor";
+	toktyp[";"] = "End_of_statement representor";
 	toktyp["#"] = "Character type declarator";
 }
 
@@ -179,14 +179,13 @@ string get_num(string line, int len, int &ind){
 		case '7':
 		case '8':
 		case '9':
-			break;
 		default:
 			break;
 		}
 		buf.push_back(c); 
 		++ind;
 	}
-	if(line[ind]==' ' || line[ind]==';' || isBinaryOperator(""+line[ind]) || isRelationalOperator(""+line[ind])){
+	if(line[ind]==' ' || line[ind]==';' || line[ind]==')' || line[ind]=='\n' || line[ind]=='}' || isBinaryOperator(""+line[ind]) || isRelationalOperator(""+line[ind]) || ind>=len){
 		--ind;
 		return buf;
 	}
@@ -423,13 +422,13 @@ void lexerLine(string line, int &n){
 		}
 		else if(is_string(lexeme)){
 			// Handle Identifiers and stuff that cannot be mapped
-			cout << "< Identifier" << ", " << lexeme << ">" << " on line number " << n << "\n";
-			fout << "< Identifier" << ", " << lexeme << ">" << " on line number " << n << "\n";
+			cout << "<Identifier" << ", " << lexeme << ">" << " on line number " << n << "\n";
+			fout << "<Identifier" << ", " << lexeme << ">" << " on line number " << n << "\n";
 		}
 		else if(is_intLiteral(lexeme)){
 			// Integer literals
-			cout << "< int_literal" << ", " << lexeme <<">" << " on line number " << n << "\n";
-			fout << "< int_literal" << ", " << lexeme <<">" << " on line number " << n << "\n";
+			cout << "<int_literal" << ", " << lexeme <<">" << " on line number " << n << "\n";
+			fout << "<int_literal" << ", " << lexeme <<">" << " on line number " << n << "\n";
 		}
 		else{
 			cout << lexeme << " : Error on line number : " << n << "  Illegal Symbol or Combination of Symbols\n";
@@ -446,7 +445,7 @@ int main(){
     mapKeywords();
     setTokenTypes();
     string linbuff = "";
-	ifstream fin("inp.txt");
+	ifstream fin("inp1.txt");
 	ofstream fout("out.txt");
 	int c,n=0;
 	if (fin.is_open()){

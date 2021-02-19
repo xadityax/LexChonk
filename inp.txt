@@ -1,10 +1,11 @@
 $ main(){
-$ a = 52323;
-$ a = 523ab;
-$ b = ab523;
-$ a=523;
-@ c = "skdskdksd"; $ a = 5;
-a++;
-$ a = c+5;
+^ Code to find the sum of first 10 natural numbers 
+$ i = 1;
+$ sum = 0
+while(i<11){
+ sum = sum + i;
+ ++i;
+}
+
 return 0;
 } 
