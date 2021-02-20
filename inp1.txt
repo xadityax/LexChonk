@@ -1,5 +1,5 @@
 $ main(){
-	^Code to check if user specufied number is odd or even
+	^Code to check if user specified number is odd or even
 	@ result = "odd";
 	$ num = 0; ^User needs to enter the number here 
 	$ modval= num%2;
