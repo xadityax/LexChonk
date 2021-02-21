@@ -1,22 +1,12 @@
-$ fact( $ n) {
-	if (n <1){
-		return 1;
-	}
-	else if (n = 1){
-		return 1;
-	}
-	else{
-		return n*fact(n-1);
-	}
-}
 $ main(){
-	$ x;
-	x = 1;
-	while (x < 11) {
-		write(x);
-		write(fact(x));
-		writeln();
-		x = x + 1;
+	^Code to check if user specified number is odd or even
+	@ result = "odd";
+	$ num = 0; ^User needs to enter the number here 
+	$ modval= num%2;
+	if(modval==0){
+		result="even_number here";
+	}else{
+		result="odd_number here";
 	}
 	return 0;
 }

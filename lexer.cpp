@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <bits/stdc++.h>
+#include <bits/stdc++.h>
 #include <vector>
 #include <map>
 #include <iostream>
 #include <fstream>
+#include "lexer.h"
 using namespace std;
 
 ofstream fout ("out.txt");
@@ -31,7 +32,7 @@ void setTokenTypes(){
 	toktyp[")"] = "Parentheses end";
 	toktyp["{"] = "Braces begin";
 	toktyp["}"] = "Braces end";
-	toktyp["+"] = "Arithmetic operator - addition";
+	toktyp["+"] = "Arithmetic operator - addition OR String Concatenation";
 	toktyp["-"] = "Arithmetic operator - subtraction";
 	toktyp["/"] = "Arithmetic operator - division";
 	toktyp["*"] = "Arithmetic operator - multiplication";
@@ -143,7 +144,7 @@ bool is_alphanumericString(string str){
 }
 
 // mostly identifiers are matched here
-string get_name(string line, int len, int &ind){
+string stringParse(string line, int len, int &ind){
 	string buf;
 	buf.push_back(line[ind++]);
 	while(ind<len){
@@ -157,7 +158,7 @@ string get_name(string line, int len, int &ind){
 }
 
 // integer literals parsing
-string get_num(string line, int len, int &ind){
+string integerParse(string line, int len, int &ind){
 	string buf;
 	//negative numbers
 	if(line[ind] == '~'){
@@ -193,7 +194,7 @@ string get_num(string line, int len, int &ind){
 }
 
 // as name suggests
-void remove_back_slash(string &s){
+void backSlashString(string &s){
 	for( auto it = s.begin(); it != s.end(); ++it ) {
 		if(* it == '\\'){
 			if(it + 1 >= s.end()) 
@@ -211,7 +212,7 @@ void remove_back_slash(string &s){
 }
 
 // string literals enclosed with " "
-string get_const_str(string line, int len, int &ind){
+string stringLiteral(string line, int len, int &ind){
 	string buf = "\"";
 	const char quote_type = line[ind];
 	int starting_at = ind;
@@ -228,13 +229,13 @@ string get_const_str(string line, int len, int &ind){
 	// omit ending quote
 	++ind;
 	// check if required
-	remove_back_slash(buf);
+	backSlashString(buf);
 	buf+="\"";
 	--ind;
 	return buf;
 }
 
-string get_operator(string line,int line_len,int &i){
+string specOperators(string line,int line_len,int &i){
 	int op_type = -1;
 	switch(line[i]) {
 	case '+':
@@ -351,13 +352,13 @@ string getNextLex(string line, int &ind){
 
 		// strings
 		else if(isalpha(line[ind])){
-			string str = get_name(line, line.length(), ind);
+			string str = stringParse(line, line.length(), ind);
 			return str;
 		}
 
 		// numbers
 		else if(isdigit(line[ind]) || line[ind]== '~'){
-			string num = get_num(line,line.length(),ind);
+			string num = integerParse(line,line.length(),ind);
 			if(num.empty()){
 				return "error_Digit";
 			}
@@ -366,7 +367,7 @@ string getNextLex(string line, int &ind){
 
 		// const strings
 		else if(line[ind] == '\"' || line[ind] == '\'' ) {
-			string res = get_const_str(line, line.length(),ind);
+			string res = stringLiteral(line, line.length(),ind);
 			if(res.empty()){
 				return "error_Const_String";
 			}
@@ -374,7 +375,7 @@ string getNextLex(string line, int &ind){
 		}
 
 		// operators
-		string op = get_operator(line,line.length(),ind);
+		string op = specOperators(line,line.length(),ind);
 		if(op.empty()){
 			return "error_Operator_OR_Brackets";
 		}
@@ -436,40 +437,4 @@ void lexerLine(string line, int &n){
 			break;
 		}
 	}
-}
-
-int main(){
-	string testfile_name;
-	cout<<"Enter the name of the testfile (e.g. inp.txt): \n";
-	cin>>testfile_name;
-	ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-    mapKeywords();
-    setTokenTypes();
-    string linbuff = "";
-	ifstream fin(testfile_name);
-	ofstream fout("out.txt");
-	int c,n=0;
-	if (fin.is_open()){
-		if(fout.is_open()){
-		    while (getline(fin,linbuff)){
-		    	cout << '\n';
-		    	linbuff+="\n";
-		    	n++;
-		    	//parse line by line
-		    	lexerLine(linbuff,n);
-	       		linbuff = "";
-		    }
-		    fin.close();
-		    fout.close();
-		}
-		else{
-    		cout << "Error opening output file. Please try again. \n";
-    	}
-	}
-	else{
-		cout << "Error opening input file. Please try again. \n";
-	}
-	return 0;
 }

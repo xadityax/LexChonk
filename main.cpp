@@ -1,3 +1,11 @@
+/*
+G19 - ChonkskyNormalForm
+Manisha Katariya 2017B3A70354H
+Aditya Agarwal 2017B1A71075H
+Jajal Bansal 2017B3A71610H
+Rudrajit Kargupta 2017B3A70452H
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

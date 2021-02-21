@@ -1,12 +1,11 @@
 $ main(){
-	^Code to check if user specified number is odd or even
-	@ result = "odd";
-	$ num = 0; ^User needs to enter the number here 
-	$ modval= num%2;
-	if(modval==0){
-		result="even_number here";
-	}else{
-		result="odd_number here";
-	}
-	return 0;
+^ Code to find the sum of first 10 natural numbers 
+$ i = 1;
+$ sum = 0
+while(i<11){
+ sum = sum + i;
+ ++i;
 }
+
+return 0;
+} 
